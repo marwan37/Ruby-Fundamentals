@@ -4,65 +4,62 @@ def prompt(message)
   puts "=> #{message}"
 end
 
-loop do
-  prompt("Welcome to Mortgage Calculator!")
-  prompt("-------------------------------")
-
-  prompt("What is the loan amount?")
-
-  amount = ''
-  loop do
-    amount = gets.chomp
-
-    if amount.empty? || amount.to_f < 0
-      prompt("Please enter a valid number.")
-    else
-      break
-    end
-  end
-
-  prompt("What is the Annual Interest Rate (APR)?")
-  prompt("(Example: 5 for 5% or 3.7 for 3.7%)")
-
-  interest_rate = ''
-  loop do
-    interest_rate = gets.chomp
-
-    if interest_rate.empty?() || interest_rate.to_f() < 0
-      prompt("Must enter positive number.")
-    else
-      break
-    end
-  end
-
-  prompt("What is the loan duration (in years)?")
-
-  years = ''
-  loop do
-    years = gets.chomp
-
-    if years.empty?() || years.to_i() < 0
-      prompt("Please enter a valid number.")
-    else
-      break
-    end
-  end
-
-  annual_interest_rate = interest_rate.to_f() / 100
-  monthly_interest_rate = annual_interest_rate / 12
-  months = years.to_i() * 12
-
-  monthly_payment = amount.to_f() *
-                    (monthly_interest_rate /
-                    (1 - (1 + monthly_interest_rate)**(-months)))
-
-  prompt("Your monthly payment is: $#{format('%.2f', monthly_payment)}")
-
-  prompt("Another calculation?")
-  answer = gets.chomp
-
-  break unless answer.downcase().start_with?('y')
+def valid_number?(number)
+  number.to_i.to_s == number
 end
 
-prompt("Thank you for using the Mortgage Calculator!")
-prompt("Good bye!")
+def float?(input)
+  input.to_f.to_s == input
+end
+
+def valid_apr?(input)
+  valid_number?(input) || float?(input)
+end
+
+prompt("Welcome to Mortgage Calculator!")
+
+loan_amount = ''
+loop do
+  prompt("What is the loan amount?")
+  loan_amount = gets.chomp
+
+  if valid_number?(loan_amount)
+    loan_amount = loan_amount.to_i
+    break
+  else
+    prompt("Please enter a valid number.")
+  end
+end
+
+monthly_interest_rate = ''
+loop do
+  prompt("What is the Annual Percentage Rate (APR)? (For '5.5%' type 5.5)")
+  monthly_interest_rate = gets.chomp
+
+  if valid_apr?(monthly_interest_rate)
+    monthly_interest_rate = monthly_interest_rate.to_f / 12 / 100
+    break
+  else
+    prompt("Please enter a valid number.")
+  end
+end
+
+loan_duration = ''
+loop do
+  prompt("What is the loan duration in months?")
+  loan_duration = gets.chomp
+
+  if valid_number?(loan_duration)
+    loan_duration = loan_duration.to_i
+    break
+  else
+    prompt("Please enter a valid number.")
+  end
+end
+
+prompt("Calculating monthly mortgage payment...")
+
+interest_c = (1 + monthly_interest_rate)**(-loan_duration)
+monthly_payment = loan_amount * (monthly_interest_rate / (1 - interest_c))
+
+prompt("Your monthly payment is $#{monthly_payment.round(2)}")
