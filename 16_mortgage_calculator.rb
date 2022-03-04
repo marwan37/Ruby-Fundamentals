@@ -5,7 +5,11 @@ def prompt(message)
 end
 
 def integer?(number)
+<<<<<<< HEAD
   number.to_i.to_s == number && number.to_i > 0 && !number.empty?
+=======
+  number.to_i.to_s == number && input.to_i > 0 && !input.empty?
+>>>>>>> 3e0dee10c205a1578db95ed24fcf009184c6943e
 end
 
 def float?(input)
@@ -73,7 +77,11 @@ loop do
 
   prompt("Would you like to make another calculation? (Y/N)")
   answer = gets.chomp
+<<<<<<< HEAD
   break unless answer.downcase.start_with?('y')
+=======
+  break unless answer.downcase.starts_with?('y')
+>>>>>>> 3e0dee10c205a1578db95ed24fcf009184c6943e
 end
 
 prompt("Thank you for using Mortgage Calculator!")
